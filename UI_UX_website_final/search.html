@@ -162,6 +162,42 @@
 
 <script>
   let articles = JSON.parse(localStorage.getItem('articles')) || [];
+
+  // デフォルト4件の記事をlocalStorageに保存（空なら）
+  if (articles.length === 0) {
+    articles = [
+      {
+        title: "2dgame.yesterday (アクションゲーム) Re:Create",
+        explanation: "プログラミングサークル「Re:Create」ではゲームを作っています。去年の麗陵祭で公開したゲームはリンクから遊べます。",
+        link: "https://reitaku-recreate.booth.pm/items/6250379",
+        imageDataUrl: "sample_2dgame_yesterday.jpg",
+        index: 0,
+      },
+      {
+        title: "【新作発表!】図形無双 体験版 (アクションゲーム) Re:Create",
+        explanation: "前作からグレードアップして帰ってきました! PCゲーム実力者よ集え!　←→ 移動　Z ジャンプ　X 攻撃　C コマンド攻撃(アイテム取得時のみ)",
+        link: "https://drive.google.com/drive/u/0/folders/15vthyzvvq0g-ojPQYBgcUw2i--iV6kmE",
+        imageDataUrl: "sample_Shape_Battle-hardened.png",
+        index: 1,
+      },
+      {
+        title: "棒人間の冒険 (アクションゲーム) Re:Create",
+        explanation: "棒人間を操作してボスを倒そう! 素材も公開しています!　←→ 移動　Z ジャンプ　X 攻撃　　(htmlファイルを開くと遊べます)",
+        link: "https://drive.google.com/drive/u/0/folders/1SB48tAiQF1s2Cc3_hUPr-J_2PFlgz1h2",
+        imageDataUrl: "sample_commanderaction.jpg",
+        index: 2,
+      },
+      {
+        title: "蒼穹影幻境 (アクションゲーム) Re:Create",
+        explanation: "1人で退屈なときの暇つぶしに！ 無限に続く迷路で、目指せハイスコア！ クリアするごとにだんだん難しくなります。",
+        link: "https://reitaku-recreate.booth.pm/items/6250204",
+        imageDataUrl: "sample_maze.jpg",
+        index: 3,
+      }
+    ];
+    localStorage.setItem('articles', JSON.stringify(articles));
+  }
+
   const searchInput = document.getElementById('searchInput');
   const articleContainer = document.getElementById('articleContainer');
 
@@ -225,7 +261,6 @@
   }
 
   function clearSearch() {
-    // queryパラメータを除いたURLへリダイレクト
     window.location.href = 'search.html';
   }
 
