@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>成果物の追加</title>
+  <link rel="stylesheet" href="all.css" />
+  <link rel="stylesheet" href="add-creation.css" />
+  <style>
+    form {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #f9fff9;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px #ccc;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      resize: vertical;
+    }
+    input[type="file"] {
+      margin-bottom: 14px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header">
+    <div class="header-logo">
+      <a href="index.html"><img src="logo.svg" alt="ロゴ" /></a>
+      <h1><a href="index.html">成果物リスト</a></h1>
+    </div>
+    <nav class="header-list">
+      <ul>
+        <li><a href="index.html"><img class="header-img" src="home.png" /> ホーム</a></li>
+        <li><a href="search.html"><img class="header-img" src="search-icon.svg" />検索</a></li>
+        <li><a href="add-creation.html"><img class="header-img" src="add-creation.png"> 成果物を追加</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+  <h2>成果物の追加</h2>
+
+  <form id="creationForm">
+    <label for="title">タイトル</label>
+    <input type="text" id="title" name="title" required />
+
+    <label for="explanation">説明文</label>
+    <textarea id="explanation" name="explanation" rows="6" required></textarea>
+
+    <label for="link">リンク(URL)</label>
+    <input type="text" id="link" name="link" placeholder="https://example.com" />
+
+    <label for="imageFile">画像ファイル</label>
+    <input type="file" id="imageFile" name="imageFile" accept="image/*" />
+
+    <button type="submit">記事を追加</button>
+  </form>
+</div>
+
+<script>
+  let editIndex = null;
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('editIndex')) {
+      editIndex = Number(params.get('editIndex'));
+      loadArticleForEdit(editIndex);
+    }
+  });
+
+  function loadArticleForEdit(index) {
+    const articles = JSON.parse(localStorage.getItem('articles')) || [];
+    if (index >= 0 && index < articles.length) {
+      const article = articles[index];
+      document.getElementById('title').value = article.title;
+      document.getElementById('explanation').value = article.explanation;
+      document.getElementById('link').value = article.link || '';
+      // 画像ファイルはフォームで選択できないため、変更は新規選択で対応
+    }
+  }
+
+  document.getElementById('creationForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const title = document.getElementById('title').value.trim();
+    const explanation = document.getElementById('explanation').value.trim();
+    const link = document.getElementById('link').value.trim();
+    const fileInput = document.getElementById('imageFile');
+    let imageDataUrl = '';
+
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      imageDataUrl = await readFileAsDataURL(file);
+    } else if (editIndex !== null) {
+      const articles = JSON.parse(localStorage.getItem('articles')) || [];
+      if (articles[editIndex] && articles[editIndex].imageDataUrl) {
+        imageDataUrl = articles[editIndex].imageDataUrl;
+      }
+    } else {
+      alert('画像ファイルを選択してください。');
+      return;
+    }
+
+    let articles = JSON.parse(localStorage.getItem('articles')) || [];
+
+    if (editIndex !== null) {
+      articles[editIndex] = { title, explanation, link, imageDataUrl, index: editIndex };
+    } else {
+      articles.push({ title, explanation, link, imageDataUrl, index: articles.length });
+    }
+
+    localStorage.setItem('articles', JSON.stringify(articles));
+
+    // ここで検索ページへ遷移（タイトルをクエリにして）
+    window.location.href = `search.html?query=${encodeURIComponent(title)}`;
+  });
+
+  function readFileAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.onerror = e => reject(e);
+      reader.readAsDataURL(file);
+    });
+  }
+</script>
+
+</body>
+</html>

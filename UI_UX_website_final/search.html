@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>成果物の検索</title>
+  <link rel="stylesheet" href="all.css">
+  <link rel="stylesheet" href="search.css">
+  <style>
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-button {
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+    .dropdown-content a {
+      color: black;
+      padding: 10px 16px;
+      text-decoration: none;
+      display: block;
+    }
+    .dropdown-content a:hover {
+      background-color: #ddd;
+    }
+    .show {
+      display: block;
+    }
+
+    .article {
+      display: flex;
+      align-items: center;
+      background-color: #efffdf;
+      margin-bottom: 12px;
+      padding: 12px;
+      border-radius: 6px;
+    }
+    .article img {
+      max-height: 90%;
+      max-width: 180px;
+      object-fit: contain;
+      margin-right: 16px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .article-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .title-and-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .title-and-buttons h3 {
+      margin: 0;
+      font-size: 1.2em;
+    }
+
+    .link-url {
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 8px;
+      word-break: break-all;
+    }
+
+    .copy-btn, .edit-btn, .delete-btn {
+      margin-left: 4px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .copy-btn {
+      background: none;
+      padding: 0;
+    }
+    .copy-btn img {
+      height: 20px;
+    }
+    .edit-btn {
+      background-color: #3498db;
+      color: white;
+      padding: 6px 12px;
+    }
+    .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+      padding: 6px 12px;
+    }
+
+    .search-box-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .clear-btn {
+      padding: 6px 12px;
+      font-size: 14px;
+      background-color: #ccc;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .clear-btn:hover {
+      background-color: #bbb;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header">
+    <div class="header-logo">
+      <a href="index.html"><img src="logo.svg" alt="ロゴ"></a>
+      <h1><a href="index.html">成果物リスト</a></h1>
+    </div>
+    <nav class="header-list">
+      <ul>
+        <li><a href="index.html"><img class="header-img" src="home.png"> ホーム</a></li>
+        <li><a href="search.html"><img class="header-img" src="search-icon.svg"> 検索</a></li>
+        <li><a href="add-creation.html"><img class="header-img" src="add-creation.png"> 成果物を追加</a></li>
+        <div class="dropdown">
+          <div id="dropdownMenu" class="dropdown-content">
+            <a href="#">設定</a>
+            <a href="#">ヘルプ</a>
+          </div>
+        </div>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="container">
+  <h2 id="article-search">記事検索</h2>
+  <div class="search-box-wrapper">
+    <input class="search-box" type="text" id="searchInput" placeholder="タイトルや説明で検索">
+    <button class="clear-btn" onclick="clearSearch()">検索ボックスをクリア</button>
+  </div>
+
+  <h2>記事一覧</h2>
+  <div id="articleContainer"></div>
+</div>
+
+<script>
+  let articles = JSON.parse(localStorage.getItem('articles')) || [];
+  const searchInput = document.getElementById('searchInput');
+  const articleContainer = document.getElementById('articleContainer');
+
+  function renderArticles(filteredArticles) {
+    articleContainer.innerHTML = '';
+    if (filteredArticles.length === 0) {
+      articleContainer.innerHTML = '<p>一致する記事が見つかりませんでした。</p>';
+      return;
+    }
+
+    filteredArticles.forEach(({ title, explanation, link, imageDataUrl, index }) => {
+      const div = document.createElement('div');
+      div.classList.add('article');
+      div.innerHTML = `
+        <img src="${imageDataUrl}" alt="記事画像">
+        <div class="article-content">
+          <div class="title-and-buttons">
+            <h3>${title}</h3>
+            <div>
+              <button class="copy-btn" onclick="copyLink('${encodeURIComponent(title)}')">
+                <img src="copylink.svg" alt="リンクをコピー" title="リンクをコピー">
+              </button>
+              <button class="edit-btn" onclick="editArticle(${index})">編集</button>
+              <button class="delete-btn" onclick="deleteArticle(${index})">削除</button>
+            </div>
+          </div>
+          ${link ? `<div class="link-url"><a href="${link}" target="_blank">${link}</a></div>` : ''}
+          <p>${explanation}</p>
+        </div>
+      `;
+      articleContainer.appendChild(div);
+    });
+  }
+
+  function filterArticles() {
+    const query = searchInput.value.trim().toLowerCase();
+    const filtered = articles.filter(({ title, explanation }) =>
+      title.toLowerCase().includes(query) ||
+      explanation.toLowerCase().includes(query)
+    );
+    renderArticles(filtered);
+  }
+
+  function deleteArticle(index) {
+    if (!confirm("本当に削除しますか？")) return;
+    articles.splice(index, 1);
+    articles = articles.map((a, i) => ({ ...a, index: i }));
+    localStorage.setItem('articles', JSON.stringify(articles));
+    filterArticles();
+  }
+
+  function editArticle(index) {
+    window.location.href = `add-creation.html?editIndex=${index}`;
+  }
+
+  function copyLink(title) {
+    const url = `${location.origin}${location.pathname}?query=${title}`;
+    navigator.clipboard.writeText(url)
+      .then(() => alert("リンクをコピーしました！"))
+      .catch(err => alert("コピーに失敗しました: " + err));
+  }
+
+  function clearSearch() {
+    // queryパラメータを除いたURLへリダイレクト
+    window.location.href = 'search.html';
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get('query');
+    if (query) {
+      searchInput.value = query;
+    }
+    filterArticles();
+  });
+
+  searchInput.addEventListener('input', filterArticles);
+</script>
+
+<script>
+  function toggleDropdown() {
+    document.getElementById("dropdownMenu").classList.toggle("show");
+  }
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropdown-button')) {
+      const els = document.getElementsByClassName("dropdown-content");
+      for (let el of els) {
+        el.classList.remove('show');
+      }
+    }
+  };
+</script>
+
+</body>
+</html>

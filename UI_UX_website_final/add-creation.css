@@ -1,0 +1,72 @@
+.article { 
+    display: flex; 
+    flex-direction: row; 
+    align-items: flex-start; 
+    margin-bottom: 20px; 
+    border-bottom: 1px solid #ccc; 
+    padding-bottom: 10px; 
+    background-color: #f0f0f0; /* 薄い灰色背景 */
+    border: 1px solid #808080;
+}
+.article img {
+    max-width: 200px;
+    max-height: 200px;
+    margin-right: 20px;
+    object-fit: contain; /* 画像を縦横比を保って表示 */
+    align-self: center;  /* 画像を縦方向で中央に配置 */
+}
+.article-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.article-content h3 {
+    margin: 0;
+    font-size: 1.2em;
+}
+.article-content p {
+    font-size: 1em;
+    margin: 10px 0;
+}
+.delete-btn, .edit-btn {
+    align-self: flex-start;
+    background-color: #ff6347;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+.edit-btn {
+    background-color: #4CAF50; /* 編集ボタンの色を緑に */
+}
+.delete-btn:hover, .edit-btn:hover {
+    background-color: #e53e3e;
+}
+textarea {
+    width: 100%;
+    height: 100px;
+}
+.hidden {
+    display: none;
+}
+
+.container {
+    margin: 20px 20px;
+}
+
+.articleForm-content {
+    margin-bottom: 8px;
+}
+
+.divide {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.search-box {
+    margin-left: 10px;
+    width: 150px;
+    height: 28px;
+}

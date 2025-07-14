@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="麗澤大学の成果物を一括で管理しているWebサイトです">
+    <link rel="stylesheet" href="all.css">
+    <link rel="stylesheet" href="index.css">
+    <title>成果物リスト</title>
+      <style>
+        /* 三点リーダ */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-button {
+      padding: 10px 20px;
+      /* background-color: #3498db; */
+      /* color: white; */
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 10px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #ddd;
+    }
+
+    .show {
+      display: block;
+    }
+  </style>
+  </head>
+  <body>
+    <header>
+      <div class="header">
+        <div class="header-logo">
+          <a href="index.html">
+            <img src="logo.svg" alt="ロゴ">
+          </a>
+          <h1><a href="index.html">成果物リスト</a></h1>
+        </div>
+        <nav class="header-list">
+          <ul>
+            <li><a href="index.html"><img class="header-img" src="home.png"> ホーム</a></li>
+            <li><a href="search.html"><img class="header-img" src="search-icon.svg" />検索</a></li>
+            <li><a href="add-creation.html"><img class="header-img" src="add-creation.png"> 成果物を追加</a></li>
+            <!-- <a class="header-dropdown" href="#"><img src="Three-point-leader.svg"></a> -->
+            <div class="dropdown">
+              <!-- <button onclick="toggleDropdown()" class="dropdown-button">︙</button> -->
+              <div id="dropdownMenu" class="dropdown-content">
+                <a href="#">設定</a>
+                <a href="#">ヘルプ</a>
+                <!-- <a href="#">***</a> -->
+              </div>
+            </div>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <h1 class="main-title">成果物リスト</h1>
+      <p class="main-explanation">みんなの成果物をリスト化できるサイト</p>
+      <!-- <div class="search-area">
+
+        <form id="searchForm">
+          <input class="search-img" type="image" src="search-icon.svg" width="30" height="30" alt="検索" value="検索する">
+          <input class="search" type="search" name="search" id="searchInput" placeholder="検索キーワードを入力">
+          <button class="search-btn" type="submit">検索</button>
+        </form>
+
+      <div id="results"></div>
+      <div class="tag">
+        
+      </div> -->
+      
+    </main>
+      <div class="add-button">
+        <a class="btn btn-creation" href="search.html"><img src="search-icon.svg"> 検索する</a>
+        <a class="btn btn-creation" href="add-creation.html"><img src="add-creation.png"> 記事を作る</a>
+      </div>
+
+    <script>
+    function toggleDropdown() {
+      document.getElementById("dropdownMenu").classList.toggle("show");
+    }
+    // 他の場所をクリックしたときに閉じる処理
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropdown-button')) {
+        const dropdowns = document.getElementsByClassName("dropdown-content");
+        for (let i = 0; i < dropdowns.length; i++) {
+          dropdowns[i].classList.remove('show');
+        }
+      }
+    }
+  </script>
+
+  <script>
+    document.getElementById('searchForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // ページリロード防止
+      const query = document.getElementById('searchInput').value;
+      // URLパラメータに入力値を埋め込んでページ遷移
+      window.location.href = `search.html?query=${encodeURIComponent(query)}`;
+    });
+  </script>
+
+  </body>
+</html>

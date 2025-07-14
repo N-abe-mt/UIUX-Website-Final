@@ -1,0 +1,104 @@
+.main-title {
+  text-align: center;
+  font-size: 48px;
+}
+
+.main-explanation {
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 60px;
+}
+.search-area {
+    margin-top: 20px;
+    max-height: 120px;
+    display: flex;
+    padding: 20px, 20px;
+    justify-content: center;
+    /* background-color: #ddd; */
+    padding-bottom: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
+    align-items: center;
+}
+
+.search-img {
+    margin-right: 8px;
+    vertical-align: middle;
+    /* background-color: white; */
+}
+
+.search-btn {
+  width:64px;
+  height: 40px;
+}
+
+.search {
+  width: 600px;
+  height: 48px;
+  border-radius: 10px;
+  
+}
+
+.add-button {
+    text-align: center;
+}
+
+.add-button a {
+    text-decoration: none;
+    display: inline-block; /* ブロック化して幅と高さを持たせる */
+    margin-top: 20px;
+    width: 50%;
+    padding: 10px; /* クリック範囲を広げるためにパディングを追加 */
+    background-color: #f0f0f0; /* 任意で背景色 */
+    text-align: center;
+    font-size: 24px; /* 任意でフォントサイズ */
+    border: 1px solid #333; /* 任意でボーダー */
+    border-radius: 5px; /* 任意で角丸 */
+    background-color: #ffe9a1;
+    color: rgb(114, 255, 114);
+}
+
+
+.btn {
+  display: inline-block;
+  padding: 0.5em 1em;
+  font-size: 1rem;
+  font-weight: 600;
+
+  color: #000000;
+  text-shadow:
+    -1px -1px 0 #000000,
+     1px -1px 0 #000000,
+    -1px  1px 0 #000000,
+     1px  1px 0 #000000;
+
+  background-color: #F08080;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  transition: background-color 0.3s ease, box-shadow 0.1s ease, transform 0.1s ease;
+
+  box-shadow: 0 4px 0 #ffe08a;
+  position: relative;
+}
+
+.btn:hover {
+  background-color: #ffce46;
+}
+
+.btn:focus {
+  outline: 2px solid  #716464;
+  outline-offset: 2px;
+}
+
+.btn:active {
+  box-shadow: 0 2px 0 #cb5a5a;
+  transform: translateY(2px);
+}
+
+h2 {
+  color: yellow;
+}
